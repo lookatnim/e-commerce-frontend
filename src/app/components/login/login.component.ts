@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthServiceTsService } from 'src/app/services/auth.service.ts.service';
+import { UserServiceTsService } from 'src/app/services/user.service.ts.service';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -8,9 +12,14 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder, 
+    private userService : UserServiceTsService, 
+    private userAuthService : AuthServiceTsService,
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -20,17 +29,23 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe(
-        response => {
-          console.log('Login successful', response);
-          // Handle successful login, e.g., navigate to another page
-        },
-        error => {
-          console.error('Login failed', error);
-          // Handle login error, e.g., display an error message
-        }
-      );
-    }
+    this.userService.login(this.loginForm.value).subscribe( 
+      (response:any) => {
+        this.userAuthService.setId(response.id);
+        this.userAuthService.setFirstName(response.firstName);
+        this.userAuthService.setLastName(response.lastName);
+        this.userAuthService.setUserName(response.userName);
+        this.userAuthService.setEmail(response.email);
+        this.userAuthService.setMobileNumber(response.mobileNumber);
+        this.userAuthService.setUserRole(response.userRole);
+        this.userAuthService.setToken(response.token);
+        window.location.reload();
+        console.log(this.userAuthService.getFirstName())
+      },
+      error => {
+        console.error('Login failed', error);
+        // Handle error response
+      }
+    );
   }
 }

@@ -1,15 +1,26 @@
 <mat-toolbar>
-    <span><mat-icon>shopping_bag</mat-icon> Cyberaco</span>
+  <span><mat-icon>shopping_bag</mat-icon> Cyberaco</span>
 
-    <div class="spacer"></div>
+  <div class="spacer"></div>
 
-    <a mat-button routerLink="home">Home</a>
-    <a mat-button routerLink="products">Products</a>
-    <a mat-button routerLink="about">About us</a>
-    <a mat-button routerLink="contact">Contact</a>
+  <a mat-button routerLink="home">Home</a>
+  <a mat-button routerLink="products" *ngIf="userRole == 1">Add Products</a>
+  <a mat-button routerLink="about">About us</a>
+  <a mat-button routerLink="contact">Contact</a>
+
+  <!-- Conditionally display login/signup buttons -->
+  <ng-container *ngIf="!userRole; else loggedInButtons">
     <a mat-raised-button routerLink="login">Login</a>
-    <a mat-raised-button color="accent">Sign up</a>
+    <a mat-raised-button routerLink="register" color="accent">Sign up</a>
+  </ng-container>
+  <ng-template #loggedInButtons>
+    <!-- Replace with logout button or user profile/menu options when authenticated -->
     <button mat-fab aria-label="cart icon">
-        <mat-icon>shopping_cart</mat-icon>
-      </button>
+      <mat-icon>shopping_cart</mat-icon>
+    </button>
+    <button mat-raised-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </ng-template>
+
 </mat-toolbar>
