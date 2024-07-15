@@ -1,0 +1,31 @@
+<mat-card>
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Product Name</mat-label>
+        <input matInput formControlName="productName">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="discription"></textarea>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Price</mat-label>
+        <input matInput type="number" formControlName="price">
+      </mat-form-field>
+  
+      <!-- <mat-form-field appearance="fill">
+        <mat-label>Stock</mat-label>
+        <input matInput type="number" formControlName="stock">
+      </mat-form-field> -->
+  
+      <div class="file-input-container">
+        <label for="fileInput">Product Image</label>
+        <input id="fileInput" type="file" (change)="onFileChange($event)">
+      </div>
+  
+      <button mat-raised-button color="primary" type="submit">Add Product</button>
+    </form>
+  </mat-card>
+  

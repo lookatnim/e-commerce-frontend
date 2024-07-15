@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder, 
     private userService : UserServiceTsService, 
     private userAuthService : AuthServiceTsService,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
@@ -26,6 +27,10 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
+
+    if(localStorage.getItem('id')){
+      this.router.navigate(['/home']);
+    }
   }
 
   onSubmit(): void {
@@ -40,7 +45,7 @@ export class LoginComponent implements OnInit {
         this.userAuthService.setUserRole(response.userRole);
         this.userAuthService.setToken(response.token);
         window.location.reload();
-        console.log(this.userAuthService.getFirstName())
+        // this.router.navigate(['/home']);
       },
       error => {
         console.error('Login failed', error);

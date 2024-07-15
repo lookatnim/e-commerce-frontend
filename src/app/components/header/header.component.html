@@ -4,7 +4,7 @@
   <div class="spacer"></div>
 
   <a mat-button routerLink="home">Home</a>
-  <a mat-button routerLink="products" *ngIf="userRole == 1">Add Products</a>
+  <a mat-button routerLink="products" *ngIf="userRole == 1">Products</a>
   <a mat-button routerLink="about">About us</a>
   <a mat-button routerLink="contact">Contact</a>
 
@@ -15,7 +15,7 @@
   </ng-container>
   <ng-template #loggedInButtons>
     <!-- Replace with logout button or user profile/menu options when authenticated -->
-    <button mat-fab aria-label="cart icon">
+    <button mat-fab aria-label="cart icon" routerLink="cart">
       <mat-icon>shopping_cart</mat-icon>
     </button>
     <button mat-raised-button (click)="logout()">

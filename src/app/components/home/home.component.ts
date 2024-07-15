@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ProductsServiceService } from 'src/app/services/products-service.service';
 
 @Component({
   selector: 'app-home',
@@ -6,23 +8,43 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  products = [
-    {
-      name: 'Product 1',
-      price: 19.99,
-      description: 'This is a great product.',
-      image: '../../../assets/img/product1.jpg'
-    },
-    {
-      name: 'Product 2',
-      price: 29.99,
-      description: 'This is another great product.',
-      image: '../../../assets/img/product2.jpg'
-    },
-    // Add more products as needed
-  ];
+  products: any[] = []; // Initialize an empty array
 
-  constructor() {}
+  constructor(private productService: ProductsServiceService, private router : Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.fetchProducts(); // Call the method to fetch products on component initialization
+  }
+
+  fetchProducts() {
+    this.productService.allProducts().subscribe(
+      (response: any) => {
+        this.products = response; // Assign the fetched products to the component's products array
+        console.log(response)
+      },
+      (error) => {
+        console.error('Error fetching products:', error);
+      }
+    );
+  }
+
+  public addToCart(productId: any): void {
+    this.productService.addToCart(productId).subscribe(
+      response => {
+        this.router.navigate(['/cart']);
+        console.log(response)
+      },
+      error => {
+        console.error('Error adding product', error);
+      }
+    );
+  }
+
+  getProductImageUrl(product: any): string {
+    if (product && product.images && product.images.length > 0) {
+      return 'data:' + product.images[0].type + ';base64,' + product.images[0].picByte;
+    }
+    return ''; // Default or placeholder image URL if no image is found
+  }
+
 }
